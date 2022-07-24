@@ -10,14 +10,14 @@ def DrawHairs (img, hairs):
 
     for hair in hairs:
         for x1, y1, x2, y2 in hair:
-            cv2.line(blank_image, (x1,y1), (x2,y2), (0, 255, 0), thickness=10)
+            cv2.line(blank_image, (x1,y1), (x2,y2), (0, 255, 0), thickness=1)
 
     img = cv2.addWeighted(img, 0.8, blank_image, 1, 0.0)
     return img
 
 cv2.namedWindow("Contrast-Brightness")
-cv2.createTrackbar("Alpha", "Contrast-Brightness", 20, 300, nothing)
-cv2.createTrackbar("Beta", "Contrast-Brightness", 30, 300, nothing)
+cv2.createTrackbar("Alpha", "Contrast-Brightness", 47, 300, nothing)
+cv2.createTrackbar("Beta", "Contrast-Brightness", 73, 300, nothing)
 
 
 #alpha = float(input('* Enter the alpha value [1.0-3.0]: '))
@@ -36,19 +36,17 @@ while True:
 
 
     canny = cv2.Canny(blurred, alpha, beta)
-    #hairs = cv2.HoughLinesP(canny, 1, np.pi/180, 50)
+    hairs = cv2.HoughLinesP(canny, 1, np.pi/180, 0)
+    print(hairs)
 
-##    for hair in hairs:
-##        for x1, y1, x2, y2 in hair:
-##            #cv2.line(img, (x1,y1), (x2,y2), (0, 255, 0), thickness=10)
-##            pass
+    img_withHairs = DrawHairs(img, hairs)
+
 
     cv2.imshow("image", img)
     cv2.imshow("blurred", blurred)
     cv2.imshow("gray", gray)
-   
     cv2.imshow("canny", canny)
-
+    cv2.imshow("img_withHairs", img_withHairs)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
